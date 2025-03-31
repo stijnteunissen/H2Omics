@@ -7,7 +7,7 @@ creating_physeq_object = function(projects) {
   destination_folder <- paste0("/content/drive/MyDrive/H2Omics_workshop/sequencing_data/", norm_method)
 
   # List files that match the phyloseq RDS pattern
-  phyloseq_file <- list.files(destination_folder, pattern = "phyloseq_uncleaned\\.RDS$", full.names = TRUE)
+  phyloseq_file <- list.files(destination_folder, pattern = "phyloseq_uncleaned\\.rds$", full.names = TRUE)
 
   # Read the RDS file containing the phyloseq object
   phyloseq <- readRDS(phyloseq_file)
@@ -16,7 +16,7 @@ creating_physeq_object = function(projects) {
   new_folder <- file.path(base_path, projects, "output_data/rds_files/Before_cleaning_rds_files")
 
   # Define the new file path for saving the phyloseq object as an RDS file
-  new_file_path <- file.path(new_folder, paste0(projects, "_phyloseq_uncleaned.RDS"))
+  new_file_path <- file.path(new_folder, paste0(projects, "_phyloseq_uncleaned.rds"))
 
   # Save the phyloseq object as an RDS file
   saveRDS(phyloseq, file = new_file_path)
