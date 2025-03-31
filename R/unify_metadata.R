@@ -10,7 +10,7 @@ unify_metadata <- function(projects) {
   metadata_file <- list.files(destination_folder, pattern = "metadata_formatted\\.tsv$", full.names = TRUE)
 
   # Read the TSV file (assumes tab-separated values)
-  metadata_tsv <- read.delim(metadata_file, col.names = TRUE, show_col_type = FALSE)
+  metadata_tsv <- read.delim(metadata_file, header = TRUE)
 
   # Display the first 10 rows of the metadata
   print(head(metadata_tsv, 10))
