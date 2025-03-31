@@ -1,4 +1,4 @@
-create_folders = function() {
+create_folders = function(projects) {
 
   project_folder = paste0(base_path, projects)
 
