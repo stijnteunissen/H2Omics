@@ -10,7 +10,7 @@ unify_metadata <- function(projects) {
   metadata_file <- list.files(destination_folder, pattern = "metadata_formatted\\.tsv$", full.names = TRUE)
 
   # Read the TSV file (assumes tab-separated values)
-  metadata_tsv <- read.delim(metadata_file, stringsAsFactors = FALSE)
+  metadata_tsv <- read.delim(metadata_file, col.names = TRUE, show_col_type = FALSE)
 
   # Display the first 10 rows of the metadata
   print(head(metadata_tsv, 10))
@@ -23,6 +23,4 @@ unify_metadata <- function(projects) {
 
   # Copy the metadata file to the new folder, overwriting if necessary
   file.copy(from = metadata_file, to = new_file_path, overwrite = TRUE)
-
-  return(metadata_tsv)
 }
