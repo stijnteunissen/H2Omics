@@ -3,7 +3,8 @@ creating_physeq_object = function(projects) {
   message("Phyloseq successfully created.")
 
   # Construct the destination folder using the global variable norm_method
-  destination_folder <- paste("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method, sep = "")
+  #destination_folder <- paste0("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method)
+  destination_folder <- paste0("/content/drive/MyDrive/H2Omics_workshop/sequencing_data/", norm_method)
 
   # List files that match the phyloseq RDS pattern
   phyloseq_file <- list.files(destination_folder, pattern = "phyloseq_uncleaned\\.RDS$", full.names = TRUE)
