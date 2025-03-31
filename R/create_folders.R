@@ -21,7 +21,7 @@ create_folders = function(projects) {
     required_files = c("table.*\\.qza$", "rooted-tree.*\\.qza$", "classifier.*\\.qza", "metadata\\.tsv$")
     for (file_pattern in required_files) {
       if (!any(grepl(file_pattern, files))) {  # Use 'files' instead of 'file'
-        error_message = paste("Error:", file_pattern, "does not exist in", source_folder, "for project:", project, "\n")
+        error_message = paste("Error:", file_pattern, "does not exist in", source_folder, "for project:", projects, "\n")
         log_message(error_message, log_file)
         stop(error_message)
       }
@@ -31,7 +31,7 @@ create_folders = function(projects) {
     optional_files = c("qPCR.*\\.csv$", "fcm.*\\.csv$", "metadata_extra\\.tsv$", "prediction*\\.RDS$")
     for (file_pattern in optional_files) {
       if (!any(grepl(file_pattern, files))) {  # Use 'files' instead of 'file'
-        warning_message = paste("Warning:", file_pattern, "does not exist in", source_folder, "for project:", project, "\n")
+        warning_message = paste("Warning:", file_pattern, "does not exist in", source_folder, "for project:", projects, "\n")
         log_message(warning_message, log_file)
       }
     }
