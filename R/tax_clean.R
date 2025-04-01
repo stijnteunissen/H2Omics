@@ -14,6 +14,10 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
   uncleaned_phyloseq <- readRDS(uncleaned_phyloseq_file)
   cleaned_phyloseq <- readRDS(cleaned_phyloseq_file)
 
+  # Convert OTU tables to matrices for subsetting
+  otu_mat_uncleaned <- as(otu_table(uncleaned_phyloseq), "matrix")
+  otu_mat_cleaned <- as(otu_table(cleaned_phyloseq), "matrix")
+
   # Determine subset dimensions (first 10 OTUs and first 5 samples)
   n_taxa_uncleaned <- min(10, nrow(otu_mat_uncleaned))
   n_samples_uncleaned <- min(5, ncol(otu_mat_uncleaned))
