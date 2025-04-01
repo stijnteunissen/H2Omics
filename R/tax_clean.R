@@ -20,10 +20,10 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
 
   # Determine subset dimensions (first 10 OTUs and first 5 samples)
   n_taxa_uncleaned <- min(10, nrow(otu_mat_uncleaned))
-  n_samples_uncleaned <- min(5, ncol(otu_mat_uncleaned))
+  n_samples_uncleaned <- min(4, ncol(otu_mat_uncleaned))
 
   n_taxa_cleaned <- min(10, nrow(otu_mat_cleaned))
-  n_samples_cleaned <- min(5, ncol(otu_mat_cleaned))
+  n_samples_cleaned <- min(4, ncol(otu_mat_cleaned))
 
   # Print the subsets
   cat("First 10 OTUs and first 5 samples of uncleaned phyloseq object:\n")

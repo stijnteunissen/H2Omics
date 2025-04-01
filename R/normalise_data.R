@@ -20,9 +20,9 @@ normalise_data <- function(physeq = without_mock_physeq,
 
     IRdisplay::display_pdf(pdf_file)
 
-  } else if (cc_val == "true") {
+  } else if (cc_val == "false") {
     message("Only biomass normalisation applied for fcm.")
   } else {
-    message("Invalid value for copy_correction.")
+    message("data normalised for copy number")
   }
 }
