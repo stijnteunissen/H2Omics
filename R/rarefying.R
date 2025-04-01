@@ -1,24 +1,23 @@
-rarefying = function(physeq = physeq,
-                     norm_method = NULL,
-                     iteration = 100) {
+rarefying <- function(physeq = physeq,
+                      norm_method = NULL,
+                      iteration = 100) {
+
+  cc_val <- tolower(as.character(copy_correction))
 
   # Construct the destination folder using the global variable norm_method
-  destination_folder <- paste("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method, copy_correction, sep = "")
+  destination_folder <- file.path("/content/drive/MyDrive/H2Omics_workshop/sequencing_data", norm_method, cc_val)
 
-  # List files that match the phyloseq RDS pattern for resolved trees
-  phyloseq_file <- list.files(destination_folder, pattern = "rarefied\\.RDS$", full.names = TRUE)
+  # Define the source folder (After_cleaning_rds_files)
+  source_folder <- file.path(destination_folder, "After_cleaning_rds_files")
 
-  # Read the existing phyloseq file
-  phyloseq <- readRDS(phyloseq_file)
+  # Define the destination folder where the entire directory should be copied
+  target_folder <- file.path(base_path, projects, "output_data", "After_cleaning_rds_files")
 
-  # Construct the new folder path for Before_cleaning_rds_files
-  new_folder <- file.path(base_path, projects, "output_data/rds_files/After_cleaning_rds_files/ASV")
+  # Check if the source folder exists
+  if (dir.exists(source_folder)) {
+  # Copy the entire directory and its contents to the target location
+  file.copy(from = source_folder, to = target_folder, recursive = TRUE, overwrite = TRUE)
+  }
 
-  # Define the new file path for saving the resolved phyloseq object as an RDS file
-  new_file_path <- file.path(new_folder, paste0(projects, "_phyloseq_resolved_tree.RDS"))
-
-  # Save the resolved phyloseq object as an RDS file
-  saveRDS(resolved_phyloseq, file = new_file_path)
-
-  message("Resolved tree successfully saved.")
+  message("Data has been rarefied.")
 }
