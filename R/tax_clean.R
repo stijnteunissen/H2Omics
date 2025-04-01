@@ -14,9 +14,19 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
   uncleaned_phyloseq <- readRDS(uncleaned_phyloseq_file)
   cleaned_phyloseq <- readRDS(cleaned_phyloseq_file)
 
-  # Print the first 10 rows of the OTU table for both uncleaned and cleaned phyloseq objects
-  print(head(otu_table(uncleaned_phyloseq), 10))
-  print(head(otu_table(cleaned_phyloseq), 10))
+  # Determine subset dimensions (first 10 OTUs and first 5 samples)
+  n_taxa_uncleaned <- min(10, nrow(otu_mat_uncleaned))
+  n_samples_uncleaned <- min(5, ncol(otu_mat_uncleaned))
+
+  n_taxa_cleaned <- min(10, nrow(otu_mat_cleaned))
+  n_samples_cleaned <- min(5, ncol(otu_mat_cleaned))
+
+  # Print the subsets
+  cat("First 10 OTUs and first 5 samples of uncleaned phyloseq object:\n")
+  print(otu_mat_uncleaned[1:n_taxa_uncleaned, 1:n_samples_uncleaned])
+
+  cat("\nFirst 10 OTUs and first 5 samples of cleaned phyloseq object:\n")
+  print(otu_mat_cleaned[1:n_taxa_cleaned, 1:n_samples_cleaned])
 
   # Construct the new folder path (using base_path and projects) for Before_cleaning_rds_files
   new_folder <- file.path(base_path, projects, "output_data/rds_files/Before_cleaning_rds_files")
