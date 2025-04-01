@@ -14,23 +14,27 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
   uncleaned_phyloseq <- readRDS(uncleaned_phyloseq_file)
   cleaned_phyloseq <- readRDS(cleaned_phyloseq_file)
 
-  # Convert OTU tables to matrices for subsetting
-  otu_mat_uncleaned <- as(otu_table(uncleaned_phyloseq), "matrix")
-  otu_mat_cleaned <- as(otu_table(cleaned_phyloseq), "matrix")
+  print(head(tax_table(uncleaned_phyloseq), 10))
+  print(head(tax_table(cleaned_phyloseq), 10))
 
-  # Determine subset dimensions (first 10 OTUs and first 5 samples)
-  n_taxa_uncleaned <- min(10, nrow(otu_mat_uncleaned))
-  n_samples_uncleaned <- min(4, ncol(otu_mat_uncleaned))
 
-  n_taxa_cleaned <- min(10, nrow(otu_mat_cleaned))
-  n_samples_cleaned <- min(4, ncol(otu_mat_cleaned))
-
-  # Print the subsets
-  cat("First 10 OTUs and first 5 samples of uncleaned phyloseq object:\n")
-  print(otu_mat_uncleaned[1:n_taxa_uncleaned, 1:n_samples_uncleaned])
-
-  cat("\nFirst 10 OTUs and first 5 samples of cleaned phyloseq object:\n")
-  print(otu_mat_cleaned[1:n_taxa_cleaned, 1:n_samples_cleaned])
+  # # Convert OTU tables to matrices for subsetting
+  # otu_mat_uncleaned <- as(tax_tabel(uncleaned_phyloseq), "matrix")
+  # otu_mat_cleaned <- as(tax_tabel(cleaned_phyloseq), "matrix")
+  #
+  # # Determine subset dimensions (first 10 OTUs and first 5 samples)
+  # n_taxa_uncleaned <- min(10, nrow(otu_mat_uncleaned))
+  # n_samples_uncleaned <- min(4, ncol(otu_mat_uncleaned))
+  #
+  # n_taxa_cleaned <- min(10, nrow(otu_mat_cleaned))
+  # n_samples_cleaned <- min(4, ncol(otu_mat_cleaned))
+  #
+  # # Print the subsets
+  # cat("First 10 OTUs and first 5 samples of uncleaned phyloseq object:\n")
+  # print(otu_mat_uncleaned[1:n_taxa_uncleaned, 1:n_samples_uncleaned])
+  #
+  # cat("\nFirst 10 OTUs and first 5 samples of cleaned phyloseq object:\n")
+  # print(otu_mat_cleaned[1:n_taxa_cleaned, 1:n_samples_cleaned])
 
   # Construct the new folder path (using base_path and projects) for Before_cleaning_rds_files
   new_folder <- file.path(base_path, projects, "output_data/rds_files/Before_cleaning_rds_files")
