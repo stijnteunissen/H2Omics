@@ -21,7 +21,5 @@ creating_physeq_object = function(projects) {
   # Save the phyloseq object as an RDS file
   saveRDS(phyloseq, file = new_file_path)
 
-  # Print the phyloseq object to the console
   print(phyloseq)
-
 }
