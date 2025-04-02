@@ -1,95 +1,148 @@
-barplot <- function(physeq = rarefied_genus_psmelt,
-                    ntaxa = NULL,
-                    norm_method = NULL,
-                    sample_matrix = NULL,
-                    group_by_factor = NULL,
-                    taxrank = "Tax_label",
-                    project_base_path = "/content/drive/MyDrive/H2Omics_workshop") {
-
-  # Zorg dat benodigde libraries beschikbaar zijn
-  if (!requireNamespace("ggplot2", quietly = TRUE)) install.packages("ggplot2")
-  suppressMessages(library(ggplot2))
+barplot = function(physeq = rarefied_genus_psmelt,
+                   ntaxa = NULL,
+                   norm_method = NULL,
+                   sample_matrix = NULL,
+                   group_by_factor = NULL,
+                   taxrank = "Tax_label") {
 
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
   # Construct the destination folder based on norm_method and copy_correction value
-  destination_folder <- file.path(project_base_path, "sequencing_data", norm_method, cc_val)
+  destination_folder <- file.path("/content/drive/MyDrive/H2Omics_workshop/sequencing_data", norm_method, cc_val)
 
-  # Determine run option based on norm_method and present_variable_factors
-  run_option <- NA
-  if (norm_method == "fcm") {
-    if (present_variable_factors == "treatment, timepoint") {
-      run_option <- "run_option_1"
-    } else if (present_variable_factors == "timepoint, treatment") {
-      run_option <- "run_option_2"
-    } else if (present_variable_factors == "timepoint") {
-      run_option <- "run_option_3"
-    } else if (present_variable_factors == "treatment") {
-      run_option <- "run_option_4"
-    }
-  } else if (norm_method == "qpcr") {
-    if (present_variable_factors == "sample_type, regrowth_day") {
-      run_option <- "run_option_1"
-    } else if (present_variable_factors == "regrowth_day, sample_type") {
-      run_option <- "run_option_2"
-    } else if (present_variable_factors == "sample_type") {
-      run_option <- "run_option_3"
-    } else if (present_variable_factors == "regrow_type") {
-      run_option <- "run_option_4"
-    }
-  }
+  relative_files <- list.files(destination_folder, pattern = "relative_data\\.rds$", full.names = TRUE)
+  absolute_files <- list.files(destination_folder, pattern = "absolute_data\\.rds$", full.names = TRUE)
 
-  if (is.na(run_option)) {
-    stop("No valid run option determined based on the present_variable_factors.")
-  }
+  plot_data_rel = readRDS(relative_files)
+  plot_data_norm = readRDS(absolute_files)
 
-  # Construct the folder path where barplot PDFs are stored
-  barplot_folder <- file.path(destination_folder, run_option)
-  message("Looking for barplot PDFs in: ", barplot_folder)
+  # Helper function to generate the base barplot
+  base_barplot <- function(plot_data, x_value, y_value, colorset,
+                           x_label = "Sample", y_label = "Value") {
+    p <- ggplot(plot_data, aes(x = !!sym(x_value), y = !!sym(y_value), fill = Tax_label)) +
+      geom_bar(stat = "identity") +
+      scale_fill_manual(name = "Genus", values = colorset) +
+      theme_classic(base_size = 14) +
+      labs(x = x_label, y = y_label, fill = "Genus") +
+      theme(axis.ticks.x = element_blank(),
+            legend.text = element_markdown(),
+            legend.key.size = unit(5, "pt"),
+            legend.position = "bottom",
+            strip.background = element_rect(colour = "white"),
+            strip.text = element_text(face = "bold"),
+            ggh4x.facet.nestline = element_line(colour = "black"))
 
-  # Output folder for figures
-  figures_folder <- file.path(project_base_path, "figures", "barplot")
-  if (!dir.exists(figures_folder)) dir.create(figures_folder, recursive = TRUE)
-
-  # Functie om PDF om te zetten naar PNG en weer te geven in Colab
-  display_pdf_as_png <- function(pdf_file, output_png) {
-    if (file.exists(pdf_file)) {
-      pdf_convert_cmd <- sprintf("convert -density 150 %s -quality 90 %s", shQuote(pdf_file), shQuote(output_png))
-      system(pdf_convert_cmd)
-
-      if (file.exists(output_png)) {
-        message("Converted to PNG: ", output_png)
-
-        # Gebruik Python om afbeelding weer te geven in Colab
-        py_run_string(sprintf("from IPython.display import display, Image; display(Image(filename='%s'))", output_png))
-      } else {
-        message("Failed to convert PDF to PNG: ", output_png)
-      }
+    if (!is.null(present_factors)) {
+      p <- p + theme(axis.text.x = element_blank())
     } else {
-      message("File does not exist: ", pdf_file)
+      p <- p + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 0))
+    }
+    return(p)
+  }
+
+  # Helper function to add facets if present_factors is provided
+  facet_add <- function(present_factors) {
+    if (!is.null(present_factors) && length(present_factors) > 0) {
+      return(
+        facet_nested(
+          cols = vars(!!!syms(present_factors)),
+          scales = "free_x",
+          space = "free",
+          nest_line = element_line(linetype = 1)
+        )
+      )
+    } else {
+      return(NULL)
     }
   }
 
-  # List and process PDF files for relative plots
-  pdf_files_relative <- list.files(barplot_folder, pattern = "barplot_relative\\.pdf$", full.names = TRUE)
-  if (length(pdf_files_relative) > 0) {
-    for (pdf_file in pdf_files_relative) {
-      output_png <- file.path(figures_folder, paste0(basename(tools::file_path_sans_ext(pdf_file)), ".png"))
-      display_pdf_as_png(pdf_file, output_png)
-    }
-  } else {
-    message("No relative barplot PDFs found in ", barplot_folder)
+  # Set default color palette if not provided
+  if (is.null(colorset)) {
+    dark2_colors <- brewer.pal(8, "Dark2")
+    paired_colors <- brewer.pal(12, "Paired")
+    set_colors <- brewer.pal(8, "Set2")
+    set1_colors <- brewer.pal(8, "Set1")
+    spectral_colors <- brewer.pal(11, "Spectral")
+    additional_palette <- unique(c(
+      "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#bcbd22", "#17becf",
+      "#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#dbdb8d", "#9edae5",
+      "#393b79", "#9c755f", "#e7298a", "#66c2a5", "#fc8d62",
+      "#8da0cb", "#e78ac3", "#a6d854", "#ffed6f", "#ffff33", "#fdbf6f", "#ff7f00", "#6a3d9a", "#b15928",
+      "#e41a1c", "#377eb8", "#4daf4a", "#ff6a4d",
+      "#c6dbef", "#fdae61", "#fee08b", "#91bfdb", "#d73027", "#4575b4", "#313695", "#ffcc00", "#a1d99b",
+      "#ff99cc", "#32cd32", "#ff6347", "#20b2aa", "#c71585", "#3cb371", "#6495ed", "#9b59b6",
+      "#2ecc71", "#e74c3c", "#3498db", "#f39c12", "#8e44ad", "#16a085", "#f1c40f", "#d35400", "#27ae60",
+      "#2980b9", "#e67e22"
+    ))
+    colorset <- unique(c(dark2_colors, paired_colors, set_colors, set1_colors, spectral_colors, additional_palette))
   }
 
-  # List and process PDF files for absolute plots
-  pdf_files_absolute <- list.files(barplot_folder, pattern = "barplot_absolute\\.pdf$", full.names = TRUE)
-  if (length(pdf_files_absolute) > 0) {
-    for (pdf_file in pdf_files_absolute) {
-      output_png <- file.path(figures_folder, paste0(basename(tools::file_path_sans_ext(pdf_file)), ".png"))
-      display_pdf_as_png(pdf_file, output_png)
-    }
-  } else {
-    message("No absolute barplot PDFs found in ", barplot_folder)
+  # Set y-axis labels for relative and absolute plots
+  ylabel_rel <- "Relative Abundance (%)"
+  ylabel_abs <- ifelse(sample_matrix == "liquid",
+                       "Cell equivalents (Cells/ml) sample",
+                       "Cell equivalents (Cells/gram) sample")
+
+  # Create output folder if it does not exist
+  barplot_folder <- file.path(figure_folder, "Barplot")
+  if (!dir.exists(barplot_folder)) {
+    dir.create(barplot_folder, recursive = TRUE)
   }
+
+  ### Generate Relative Plot ###
+  if (!is.null(group_by_factor)) {
+    all_plots_rel <- list()
+    factors <- unique(plot_data_rel[[group_by_factor]])
+    for (x in factors) {
+      data_filtered <- plot_data_rel %>% filter(.data[[group_by_factor]] == x)
+      plot_rel <- base_barplot(data_filtered, "Sample", "mean_rel_abund", colorset,
+                               x_label = "Sample", y_label = ylabel_rel) +
+        facet_add(present_factors) +
+        scale_y_continuous(expand = c(0, 0))
+      all_plots_rel[[x]] <- plot_rel
+    }
+    legend_rel <- get_legend(all_plots_rel[[1]] + theme(legend.position = "right"))
+    nplots_rel <- length(all_plots_rel)
+    final_plot_rel <- wrap_plots(all_plots_rel, ncol = nplots_rel) +
+      plot_annotation(title = "Relative Abundance")
+    barplot_relative <- plot_grid(final_plot_rel, legend_rel, ncol = 1, rel_heights = c(3, 1))
+  } else {
+    barplot_relative <- base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset,
+                                     x_label = "Sample", y_label = ylabel_rel) +
+      facet_add(present_factors) +
+      scale_y_continuous(expand = c(0, 0))
+  }
+
+  print(barplot_relative)
+  rel_file_pdf <- file.path(barplot_folder, paste0(project_name, "_barplot_relative.pdf"))
+  ggsave(filename = rel_file_pdf, plot = barplot_relative, width = 12, height = 8)
+
+  ### Generate Absolute Plot ###
+  if (!is.null(group_by_factor)) {
+    all_plots_abs <- list()
+    factors <- unique(plot_data_abs[[group_by_factor]])
+    for (x in factors) {
+      data_filtered <- plot_data_abs %>% filter(.data[[group_by_factor]] == x)
+      plot_abs <- base_barplot(data_filtered, "Sample", "norm_abund", colorset,
+                               x_label = "Sample", y_label = ylabel_abs) +
+        facet_add(present_factors) +
+        scale_y_continuous(expand = c(0, 0))
+      all_plots_abs[[x]] <- plot_abs
+    }
+    legend_abs <- get_legend(all_plots_abs[[1]] + theme(legend.position = "right"))
+    nplots_abs <- length(all_plots_abs)
+    final_plot_abs <- wrap_plots(all_plots_abs, ncol = nplots_abs) +
+      plot_annotation(title = "Absolute Abundance")
+    barplot_absolute <- plot_grid(final_plot_abs, legend_abs, ncol = 1, rel_heights = c(3, 1))
+  } else {
+    barplot_absolute <- base_barplot(plot_data_abs, "Sample", "norm_abund", colorset,
+                                     x_label = "Sample", y_label = ylabel_abs) +
+      facet_add(present_factors) +
+      scale_y_continuous(expand = c(0, 0))
+  }
+
+  print(barplot_absolute)
+  abs_file_pdf <- file.path(barplot_folder, paste0(project_name, "_barplot_absolute.pdf"))
+  ggsave(filename = abs_file_pdf, plot = barplot_absolute, width = 12, height = 8)
 }
