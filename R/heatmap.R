@@ -1,6 +1,7 @@
-heatmap = function(physeq = rarefied_genus_psmelt,
-                   ntaxa = NULL, norm_method = NULL, taxrank = "Tax_label") {
-
+heatmap <- function(physeq = rarefied_genus_psmelt,
+                    ntaxa = NULL,
+                    norm_method = NULL,
+                    taxrank = "Tax_label") {
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
@@ -39,8 +40,21 @@ heatmap = function(physeq = rarefied_genus_psmelt,
   heatmap_folder <- file.path(destination_folder, run_option)
   message("Looking for heatmap PDFs in: ", heatmap_folder)
 
-  # List PDF files in the heatmap_folder
+  # List PDF files in the heatmap_folder matching the pattern "heatmap_relative.pdf"
   pdf_files <- list.files(heatmap_folder, pattern = "heatmap_relative\\.pdf$", full.names = TRUE)
 
-  display_pdf(pdf_file)
+  # Display the first PDF file if available using IRdisplay::display_pdf
+  if (length(pdf_files) == 0) {
+    message("No heatmap PDFs found in ", heatmap_folder)
+  } else {
+    # Use the first matching file
+    pdf_file <- pdf_files[1]
+    pdf_size <- file.info(pdf_file)$size
+    pdf_data <- readBin(pdf_file, what = "raw", n = pdf_size)
+    if (!requireNamespace("IRdisplay", quietly = TRUE)) {
+      install.packages("IRdisplay")
+    }
+    suppressMessages(library(IRdisplay))
+    IRdisplay::display_pdf(pdf_data)
+  }
 }

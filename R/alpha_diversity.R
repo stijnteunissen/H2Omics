@@ -1,8 +1,7 @@
-alpha_diversity = function(physeq = physeq,
-                           norm_method = NULL,
-                           taxrank = c("Phylum", "Class", "Order", "Family", "Tax_label"),
-                           date_factor = NULL) {
-
+alpha_diversity <- function(physeq = physeq,
+                            norm_method = NULL,
+                            taxrank = c("Phylum", "Class", "Order", "Family", "Tax_label"),
+                            date_factor = NULL) {
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
@@ -45,12 +44,20 @@ alpha_diversity = function(physeq = physeq,
   pdf_files <- list.files(alpha_div_folder, pattern = "alpha_diversity\\.pdf$", full.names = TRUE)
 
   if (length(pdf_files) == 0) {
-    message("No alpha diversity PDFs found in ", heatmap_folder)
+    message("No alpha diversity PDFs found in ", alpha_div_folder)
   } else {
-    # Display each PDF inline (one after the other)
+    # Install IRdisplay if not available
+    if (!requireNamespace("IRdisplay", quietly = TRUE)) {
+      install.packages("IRdisplay")
+    }
+    suppressMessages(library(IRdisplay))
+
+    # Display each PDF inline
     for (pdf_file in pdf_files) {
       message("Displaying: ", pdf_file)
-      display_pdf(pdf_file)
+      pdf_size <- file.info(pdf_file)$size
+      pdf_data <- readBin(pdf_file, what = "raw", n = pdf_size)
+      IRdisplay::display_pdf(pdf_data)
     }
   }
 }
