@@ -40,15 +40,7 @@ heatmap = function(physeq = rarefied_genus_psmelt,
   message("Looking for heatmap PDFs in: ", heatmap_folder)
 
   # List PDF files in the heatmap_folder
-  pdf_files <- list.files(heatmap_folder, pattern = "heatmap\\.pdf$", full.names = TRUE)
+  pdf_files <- list.files(heatmap_folder, pattern = "heatmap_relative\\.pdf$", full.names = TRUE)
 
-  if (length(pdf_files) == 0) {
-    message("No heatmap PDFs found in ", heatmap_folder)
-  } else {
-    # Display each PDF inline (one after the other)
-    for (pdf_file in pdf_files) {
-      message("Displaying: ", pdf_file)
-      display_pdf(pdf_file)
-    }
-  }
+  display_pdf(pdf_file)
 }

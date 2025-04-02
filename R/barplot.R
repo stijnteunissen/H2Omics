@@ -44,15 +44,10 @@ barplot = function(physeq = rarefied_genus_psmelt,
   message("Looking for barplot PDFs in: ", barplot_folder)
 
   # List PDF files in the barplot_folder
-  pdf_files <- list.files(barplot_folder, pattern = "barplot\\.pdf$", full.names = TRUE)
+  pdf_files_relative <- list.files(barplot_folder, pattern = "barplot_relative\\.pdf$", full.names = TRUE)
+  pdf_files_absolute <- list.files(barplot_folder, pattern = "barplot_absolute\\.pdf$", full.names = TRUE)
 
-  if (length(pdf_files) == 0) {
-    message("No barplot PDFs found in ", barplot_folder)
-  } else {
-    # Display each PDF inline (one after the other)
-    for (pdf_file in pdf_files) {
-      message("Displaying: ", pdf_file)
-      display_pdf(pdf_file)
-    }
-  }
+  display_pdf(pdf_files_relative)
+  display_pdf(pdf_files_absolute)
 }
+
