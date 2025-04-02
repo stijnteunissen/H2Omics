@@ -3,13 +3,18 @@ barplot <- function(physeq = rarefied_genus_psmelt,
                     norm_method = NULL,
                     sample_matrix = NULL,
                     group_by_factor = NULL,
-                    taxrank = "Tax_label") {
+                    taxrank = "Tax_label",
+                    project_base_path = "/content/drive/MyDrive/H2Omics_workshop") {
+
+  # Zorg dat benodigde libraries beschikbaar zijn
+  if (!requireNamespace("ggplot2", quietly = TRUE)) install.packages("ggplot2")
+  suppressMessages(library(ggplot2))
 
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
   # Construct the destination folder based on norm_method and copy_correction value
-  destination_folder <- file.path("/content/drive/MyDrive/H2Omics_workshop/sequencing_data", norm_method, cc_val)
+  destination_folder <- file.path(project_base_path, "sequencing_data", norm_method, cc_val)
 
   # Determine run option based on norm_method and present_variable_factors
   run_option <- NA
@@ -43,32 +48,46 @@ barplot <- function(physeq = rarefied_genus_psmelt,
   barplot_folder <- file.path(destination_folder, run_option)
   message("Looking for barplot PDFs in: ", barplot_folder)
 
-  # Function to display a PDF file using IRdisplay by reading its raw content
-  display_pdf_file <- function(pdf_file) {
+  # Output folder for figures
+  figures_folder <- file.path(project_base_path, "figures", "barplot")
+  if (!dir.exists(figures_folder)) dir.create(figures_folder, recursive = TRUE)
+
+  # Functie om PDF om te zetten naar PNG en weer te geven in Colab
+  display_pdf_as_png <- function(pdf_file, output_png) {
     if (file.exists(pdf_file)) {
-      pdf_size <- file.info(pdf_file)$size
-      pdf_data <- readBin(pdf_file, what = "raw", n = pdf_size)
-      IRdisplay::display_pdf(pdf_data)
+      pdf_convert_cmd <- sprintf("convert -density 150 %s -quality 90 %s", shQuote(pdf_file), shQuote(output_png))
+      system(pdf_convert_cmd)
+
+      if (file.exists(output_png)) {
+        message("Converted to PNG: ", output_png)
+
+        # Gebruik Python om afbeelding weer te geven in Colab
+        py_run_string(sprintf("from IPython.display import display, Image; display(Image(filename='%s'))", output_png))
+      } else {
+        message("Failed to convert PDF to PNG: ", output_png)
+      }
     } else {
       message("File does not exist: ", pdf_file)
     }
   }
 
-  # List and display PDF files for relative plots
+  # List and process PDF files for relative plots
   pdf_files_relative <- list.files(barplot_folder, pattern = "barplot_relative\\.pdf$", full.names = TRUE)
   if (length(pdf_files_relative) > 0) {
     for (pdf_file in pdf_files_relative) {
-      display_pdf_file(pdf_file)
+      output_png <- file.path(figures_folder, paste0(basename(tools::file_path_sans_ext(pdf_file)), ".png"))
+      display_pdf_as_png(pdf_file, output_png)
     }
   } else {
     message("No relative barplot PDFs found in ", barplot_folder)
   }
 
-  # List and display PDF files for absolute plots
+  # List and process PDF files for absolute plots
   pdf_files_absolute <- list.files(barplot_folder, pattern = "barplot_absolute\\.pdf$", full.names = TRUE)
   if (length(pdf_files_absolute) > 0) {
     for (pdf_file in pdf_files_absolute) {
-      display_pdf_file(pdf_file)
+      output_png <- file.path(figures_folder, paste0(basename(tools::file_path_sans_ext(pdf_file)), ".png"))
+      display_pdf_as_png(pdf_file, output_png)
     }
   } else {
     message("No absolute barplot PDFs found in ", barplot_folder)
