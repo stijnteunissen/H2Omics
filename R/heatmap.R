@@ -7,7 +7,7 @@ heatmap <- function(physeq = rarefied_genus_psmelt,
   cc_val <- tolower(as.character(copy_correction))
 
   # Construct the destination folder based on norm_method and copy_correction value
-  destination_folder <- file.path("/content/drive/MyDrive/H2Omics_workshop/sequencing_data", norm_method, cc_val)
+  destination_folder <- file.path("/content/drive/MyDrive/H2Omics_workshop/sequencing_data", norm_method, cc_val, "After_cleaning_rds_files")
 
   relative_files <- list.files(destination_folder, pattern = "relative_data\\.rds$", full.names = TRUE)
   absolute_files <- list.files(destination_folder, pattern = "absolute_data\\.rds$", full.names = TRUE)
