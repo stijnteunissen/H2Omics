@@ -1,4 +1,4 @@
-beta_diversity <- function(physeq = NULL,
+beta_diversity <- function(physeq = physeq,
                            taxrank = "ASV",
                            norm_method = NULL,
                            ordination_method = "PCoA",
