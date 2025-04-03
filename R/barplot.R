@@ -5,6 +5,7 @@ barplot = function(physeq = rarefied_genus_psmelt,
                    group_by_factor = NULL,
                    taxrank = "Tax_label") {
 
+
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
@@ -27,7 +28,7 @@ barplot = function(physeq = rarefied_genus_psmelt,
     p = ggplot(plot_data, aes(x = !!sym(x_value), y = !!sym(y_value), fill = Tax_label)) +
       geom_bar(stat = "identity") +
       scale_fill_manual(name = "Genus", values = colorset) +
-      theme_classic(base_size = 14) +
+      theme_classic(base_size = 13) +
       labs(x = x_label, y = y_label, fill = "Genus") +
       theme(axis.text.x = element_blank(),
             axis.ticks.x = element_blank(),
