@@ -5,7 +5,7 @@ rarefying <- function(physeq = physeq,
   cc_val <- tolower(as.character(copy_correction))
 
   # Construct the destination folder using the global variable norm_method
-  destination_folder <- file.path("/content/drive/MyDrive/H2Omics_workshop/sequencing_data", norm_method, cc_val)
+  destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshopp/sequencing_data", norm_method, cc_val)
 
   # Define the source folder (After_cleaning_rds_files)
   source_folder <- file.path(destination_folder, "After_cleaning_rds_files")

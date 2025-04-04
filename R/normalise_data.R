@@ -6,7 +6,7 @@ normalise_data <- function(physeq = without_mock_physeq,
   cc_val <- tolower(as.character(copy_correction))
 
   #destination_folder <- paste0("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method)
-  destination_folder <- paste0("/content/drive/MyDrive/H2Omics_workshop/sequencing_data/", norm_method, "/", cc_val)
+  destination_folder <- paste0("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data/", norm_method, "/", cc_val)
 
   if (cc_val == "false") {
     message("data normalised for copy number")
