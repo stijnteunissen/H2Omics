@@ -1,4 +1,4 @@
-barplot = function(physeq = rarefied_genus_psmelt,
+barplot2 = function(physeq = rarefied_genus_psmelt,
                    ntaxa = NULL,
                    norm_method = NULL,
                    sample_matrix = NULL,
@@ -83,17 +83,6 @@ barplot = function(physeq = rarefied_genus_psmelt,
 
   colorset[grep("Other", names(colorset))] <- "#D3D3D3"
 
-  barplot_relative =
-    base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset, x_label = "Sample", y_label = "Relative Abundance") +
-    ggtitle("Relative Abundance") +
-    facet_add(present_factors) +
-    scale_y_continuous(expand = c(0, 0))
-
-  print(barplot_relative)
-
-  figure_file_path = paste0(figure_folder, projects, "_barplot_relative.pdf")
-  ggsave(filename = figure_file_path, plot = barplot_relative, width = 12, height = 8)
-
   taxa_norm =
     plot_data_norm %>%
     arrange(desc(median)) %>%
@@ -109,4 +98,21 @@ barplot = function(physeq = rarefied_genus_psmelt,
   names(colorset)[(length(colorset) - num_new_taxa + 1):length(colorset)] <- new_taxa
 
   colorset[grep("Other", names(colorset))] <- "#D3D3D3"
+
+  barplot_absolute =
+    base_barplot(plot_data_norm, "Sample", "norm_abund", colorset, x_label = "Sample", y_label = "Cell equivalents (Cells/ml) sample") +
+    facet_add(present_factors) +
+    scale_y_continuous(labels = function(x) {
+      ifelse(x == 0, "0", sapply(x, function(num) {
+        base <- floor(log10(abs(num)))
+        mantissa <- num / 10^base
+        ifelse(base == 0, as.character(mantissa),
+               as.expression(bquote(.(round(mantissa, 1)) ~ "×" ~ 10^.(base))))
+      })) }, expand = c(0, 0),
+      limits = c(0, NA))
+
+  print(barplot_absolute)
+
+  figure_file_path = paste0(figure_folder, projects, "_barplot_absolute.pdf")
+  ggsave(filename = figure_file_path, plot = barplot_absolute, width = 12, height = 8)
 }
