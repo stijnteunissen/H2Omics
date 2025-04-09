@@ -5,7 +5,6 @@ barplot2 = function(physeq = rarefied_genus_psmelt,
                    group_by_factor = NULL,
                    taxrank = "Tax_label") {
 
-
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
