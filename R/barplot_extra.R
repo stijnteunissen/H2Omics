@@ -78,7 +78,7 @@ barplot_extra = function(physeq = rarefied_genus_psmelt,
   present_factors = if (length(factor_columns) > 0) factor_columns else NULL
 
   plot_data_rel %>%
-    arrange(desc(median)) %>%
+    arrange(desc(mean_rel_abund)) %>%
     pull(Tax_label) %>%
     unique() -> names(colorset)
 
@@ -94,7 +94,7 @@ barplot_extra = function(physeq = rarefied_genus_psmelt,
 
   taxa_norm =
     plot_data_norm %>%
-    arrange(desc(median)) %>%
+    arrange(desc(norm_abund)) %>%
     pull(Tax_label) %>%
     unique()
 
