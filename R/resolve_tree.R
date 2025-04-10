@@ -1,3 +1,4 @@
+#' @export
 resolve_tree = function(physeq = cleaned_physeq) {
 
   # Construct the destination folder using the global variable norm_method

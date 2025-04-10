@@ -1,3 +1,4 @@
+#' @export
 normalise_data <- function(physeq = without_mock_physeq,
                            norm_method = NULL,
                            copy_correction = TRUE) {

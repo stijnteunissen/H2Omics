@@ -1,3 +1,4 @@
+#' @export
 creating_physeq_object = function(projects) {
 
   message("Phyloseq successfully created.")

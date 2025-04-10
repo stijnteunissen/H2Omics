@@ -1,3 +1,4 @@
+#' @export
 tax_clean = function(physeq = physeq, tax_filter = TRUE) {
 
   # Construct the destination folder using the global variable norm_method

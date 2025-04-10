@@ -1,3 +1,4 @@
+#' @export
 remove_mock = function(physeq = decontam_physeq,
                        mock_genera = mock_genera,
                        mock = TRUE) {

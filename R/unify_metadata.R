@@ -1,3 +1,4 @@
+#' @export
 unify_metadata <- function(projects) {
 
   message("Metadata successfully merged.")

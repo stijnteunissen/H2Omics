@@ -1,3 +1,4 @@
+#' @export
 barplot_extra = function(physeq = rarefied_genus_psmelt,
                    ntaxa = NULL,
                    norm_method = NULL,

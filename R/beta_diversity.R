@@ -1,3 +1,4 @@
+#' @export
 beta_diversity <- function(physeq = physeq,
                            taxrank = c("Phylum", "Class", "Order", "Family", "Tax_label"),
                            norm_method = NULL,

@@ -1,3 +1,4 @@
+#' @export
 rarefying <- function(physeq = physeq,
                       norm_method = NULL,
                       iteration = 100) {
