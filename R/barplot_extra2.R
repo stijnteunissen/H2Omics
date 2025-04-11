@@ -82,20 +82,6 @@ barplot_extra2 = function(physeq = rarefied_genus_psmelt,
     pull(Tax_label) %>%
     unique() -> names(colorset)
 
-  taxa_norm =
-    plot_data_norm %>%
-    arrange(desc(norm_abund)) %>%
-    pull(Tax_label) %>%
-    unique()
-
-  new_taxa <- setdiff(taxa_norm, names(colorset))
-
-  num_new_taxa = length(new_taxa)
-  assigned_taxa <- names(colorset)
-  available_colors <- setdiff(scales::hue_pal()(num_new_taxa + length(colorset)), colorset)
-  colorset[new_taxa] <- available_colors[1:num_new_taxa]
-  names(colorset)[(length(colorset) - num_new_taxa + 1):length(colorset)] <- new_taxa
-
   barplot_absolute =
     base_barplot(plot_data_norm, "Sample", "norm_abund", colorset, x_label = "Sample", y_label = "Cell equivalents (Cells/ml) sample") +
     facet_add(present_factors) +

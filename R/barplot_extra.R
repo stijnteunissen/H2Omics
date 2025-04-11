@@ -92,20 +92,6 @@ barplot_extra = function(physeq = rarefied_genus_psmelt,
   figure_file_path = paste0(figure_folder, projects, "_barplot_pathogens_rel.pdf")
   ggsave(filename = figure_file_path, plot = barplot_relative, width = 12, height = 8)
 
-  taxa_norm =
-    plot_data_norm %>%
-    arrange(desc(norm_abund)) %>%
-    pull(Tax_label) %>%
-    unique()
-
-  new_taxa <- setdiff(taxa_norm, names(colorset))
-
-  num_new_taxa = length(new_taxa)
-  assigned_taxa <- names(colorset)
-  available_colors <- setdiff(scales::hue_pal()(num_new_taxa + length(colorset)), colorset)
-  colorset[new_taxa] <- available_colors[1:num_new_taxa]
-  names(colorset)[(length(colorset) - num_new_taxa + 1):length(colorset)] <- new_taxa
-
   } else if (norm_method == "fcm") {
   message("This plot is only available for the other dataset.")
   }
