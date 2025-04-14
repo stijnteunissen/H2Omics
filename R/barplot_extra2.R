@@ -99,7 +99,7 @@ barplot_extra2 = function(physeq = rarefied_genus_psmelt,
   figure_file_path = paste0(figure_folder, projects, "_barplot_pathogens_ab.pdf")
   ggsave(filename = figure_file_path, plot = barplot_absolute, width = 12, height = 8)
   } else if (norm_method == "fcm") {
-    message("This plot is only available for the other dataset.")
+    message("This plot is only available for the other dataset. Return to chapter 2.1, start a new project, and re-run everything below.")
   }
 
 }

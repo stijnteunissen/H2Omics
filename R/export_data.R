@@ -104,5 +104,5 @@ export_data <- function() {
   # # Create the zip archive.
   # utils::zip(zipfile = zip_file, files = files_to_zip)
   #
-  # message("Export completed! Zip file created: ", zip_file)
+  message("Export completed.")
 }

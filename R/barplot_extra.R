@@ -83,7 +83,7 @@ barplot_extra = function(physeq = rarefied_genus_psmelt,
     unique() -> names(colorset)
 
   barplot_relative =
-    base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset, x_label = "Sample", y_label = "Relative Abundance") +
+    base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset, x_label = "Sample", y_label = "Relative Abundance (%)") +
     facet_add(present_factors) +
     scale_y_continuous(expand = c(0, 0))
 
@@ -93,7 +93,6 @@ barplot_extra = function(physeq = rarefied_genus_psmelt,
   ggsave(filename = figure_file_path, plot = barplot_relative, width = 12, height = 8)
 
   } else if (norm_method == "fcm") {
-  message("This plot is only available for the other dataset.")
+  message("This plot is only available for the other dataset. Return to chapter 2.1, start a new project, and re-run everything below.")
   }
-
 }

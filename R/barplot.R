@@ -85,7 +85,7 @@ barplot = function(physeq = rarefied_genus_psmelt,
   colorset[grep("Other", names(colorset))] <- "#D3D3D3"
 
   barplot_relative =
-    base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset, x_label = "Sample", y_label = "Relative Abundance") +
+    base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset, x_label = "Sample", y_label = "Relative Abundance (%)") +
     ggtitle("Relative Abundance") +
     facet_add(present_factors) +
     scale_y_continuous(expand = c(0, 0))
