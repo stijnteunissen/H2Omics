@@ -8,13 +8,10 @@ heatmap <- function(physeq = rarefied_genus_psmelt,
   cc_val <- tolower(as.character(copy_correction))
 
   # Construct the destination folder based on norm_method and copy_correction value
-  destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data", norm_method, cc_val, "After_cleaning_rds_files")
+  destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data", norm_method, cc_val, "After_cleaning_rds_files/")
 
   relative_files <- list.files(destination_folder, pattern = "relative_data\\.rds$", full.names = TRUE)
-  absolute_files <- list.files(destination_folder, pattern = "absolute_data\\.rds$", full.names = TRUE)
-
   plot_data_rel = readRDS(relative_files)
-  plot_data_norm = readRDS(absolute_files)
 
   figure_folder = paste0(base_path , projects, "/figures/Heatmap/")
   if (!dir.exists(figure_folder)) {
@@ -55,8 +52,14 @@ heatmap <- function(physeq = rarefied_genus_psmelt,
   factor_columns = unique(c(variable_columns))
   present_factors = if (length(factor_columns) > 0) factor_columns else NULL
 
+  plot_data_rel_2 =
+    plot_data_rel %>%
+    group_by(Sample, Tax_label, na_type, !!!syms(present_factors)) %>%
+    summarise(mean_rel_abund = sum(mean_rel_abund),
+              .groups = "drop")
+
   heatmap_relative =
-    base_heatmap(plot_data_rel, "Sample", "mean_rel_abund", legend_name = "Relative\nAbundance (%)", x_label = "Sample") +
+    base_heatmap(plot_data_rel_2, "Sample", "mean_rel_abund", legend_name = "Relative\nAbundance (%)", x_label = "Sample") +
     scale_color_identity() +
     facet_add(present_factors)
 
