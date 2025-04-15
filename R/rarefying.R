@@ -13,24 +13,29 @@ rarefying <- function(physeq = physeq,
 
   # Define the destination folder where the entire directory should be copied
   target_folder <- file.path(base_path, projects, "output_data/rds_files")
+  if (!dir.exists(target_folder)) {
+    dir.create(target_folder, recursive = TRUE, showWarnings = FALSE)
+  }
 
   # Check if the source folder exists
-  if (dir.exists(source_folder)) {
   # Copy the entire directory and its contents to the target location
   file.copy(from = source_folder, to = target_folder, recursive = TRUE, overwrite = TRUE)
-  }
 
   # Define the source folder (After_cleaning_rds_files)
   source_folder_csv <- file.path(destination_folder, "csv_files")
+  if (!dir.exists(target_folder_csv)) {
+    dir.create(target_folder_csv, recursive = TRUE, showWarnings = FALSE)
+  }
 
   # Define the destination folder where the entire directory should be copied
   target_folder_csv <- file.path(base_path, projects, "output_data")
 
   # Check if the source folder exists
-  if (dir.exists(source_folder_csv)) {
-    # Copy the entire directory and its contents to the target location
-    file.copy(from = source_folder_csv, to = target_folder_csv, recursive = TRUE, overwrite = TRUE)
-  }
+  # Copy the entire directory and its contents to the target location
+  file.copy(from = source_folder_csv, to = target_folder_csv, recursive = TRUE, overwrite = TRUE)
 
   message("Data has been rarefied.")
 }
+
+
+
