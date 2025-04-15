@@ -23,12 +23,12 @@ rarefying <- function(physeq = physeq,
 
   # Define the source folder (After_cleaning_rds_files)
   source_folder_csv <- file.path(destination_folder, "csv_files")
-  if (!dir.exists(target_folder_csv)) {
-    dir.create(target_folder_csv, recursive = TRUE, showWarnings = FALSE)
-  }
 
   # Define the destination folder where the entire directory should be copied
   target_folder_csv <- file.path(base_path, projects, "output_data")
+  if (!dir.exists(target_folder_csv)) {
+    dir.create(target_folder_csv, recursive = TRUE, showWarnings = FALSE)
+  }
 
   # Check if the source folder exists
   # Copy the entire directory and its contents to the target location
