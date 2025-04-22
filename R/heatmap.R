@@ -4,6 +4,8 @@ heatmap <- function(physeq = rarefied_genus_psmelt,
                     norm_method = NULL,
                     taxrank = "Tax_label") {
 
+  log_message(paste("Step 12: making heatmap.", paste(projects, collapse = ", ")), log_file)
+
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
@@ -58,6 +60,12 @@ heatmap <- function(physeq = rarefied_genus_psmelt,
     summarise(mean_rel_abund = sum(mean_rel_abund),
               .groups = "drop")
 
+  if ("treatment" %in% colnames(plot_data_rel_2)) {
+    plot_data_rel_2 <- plot_data_rel_2 %>%
+      mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
+      mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
+  }
+
   heatmap_relative =
     base_heatmap(plot_data_rel_2, "Sample", "mean_rel_abund", legend_name = "Relative\nAbundance (%)", x_label = "Sample") +
     scale_color_identity() +
@@ -67,4 +75,6 @@ heatmap <- function(physeq = rarefied_genus_psmelt,
 
   figure_file_path = paste0(figure_folder, projects, "_heatmap_relative.pdf")
   ggsave(filename = figure_file_path, plot = heatmap_relative, width = 12, height = 8, limitsize = FALSE)
+
+  log_message("Heatmap successfully plotted.", log_file)
 }

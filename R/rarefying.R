@@ -2,6 +2,7 @@
 rarefying <- function(physeq = physeq,
                       norm_method = NULL,
                       iteration = 100) {
+  log_message(paste("Step 8: rarefied data", paste(projects, collapse = ", ")), log_file)
 
   # cc_val <- tolower(as.character(copy_correction))
   #
@@ -29,6 +30,8 @@ rarefying <- function(physeq = physeq,
   # file.copy(from = source_folder_csv, to = target_folder_csv, recursive = TRUE, overwrite = TRUE)
 
   message("Data has been rarefied.")
+
+  log_message("Data is successfully rarefied.", log_file)
 }
 
 

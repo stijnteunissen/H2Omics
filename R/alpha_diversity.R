@@ -4,6 +4,8 @@ alpha_diversity <- function(physeq = physeq,
                             taxrank = c("Phylum", "Class", "Order", "Family", "Tax_label"),
                             date_factor = NULL) {
 
+  log_message(paste("Step 13: Making alpha diversity.", paste(projects, collapse = ", ")), log_file)
+
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
@@ -64,6 +66,12 @@ alpha_diversity <- function(physeq = physeq,
   metadata = sample_data(psdata) %>% data.frame() %>% as_tibble()
   alpha_data_full = inner_join(metadata, alpha_data, by = "sampleid")
 
+  if ("treatment" %in% colnames(alpha_data_full)) {
+    alpha_data_full <- alpha_data_full %>%
+      mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
+      mutate(sampleid = factor(sampleid, levels = unique(sampleid[order(!is_control)])))
+  }
+
   chao1_plot = base_alpha_plot(alpha_data_full, "sampleid", "Chao1", x_label = "Sample", y_label = "Chao1 Index") +
     facet_add(present_factors)
 
@@ -77,4 +85,6 @@ alpha_diversity <- function(physeq = physeq,
 
   figure_file_path = paste0(figure_folder, projects, "_", taxrank_alpha_div, "_level_alpha_diversity.pdf")
   ggsave(filename = figure_file_path, plot = combined_plot, width = 12, height = 5)
+
+  log_message("Alpha diversity successfully plotted.", log_file)
 }

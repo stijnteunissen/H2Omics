@@ -9,6 +9,8 @@ beta_diversity <- function(physeq = physeq,
                            size_factor = NULL,
                            alpha_factor = NULL) {
 
+  log_message(paste("Step 14: Making beta diversity.", paste(projects, collapse = ", ")), log_file)
+
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
@@ -130,4 +132,6 @@ beta_diversity <- function(physeq = physeq,
 
   figure_file_path <- paste0(figure_folder, projects, "_beta_diversity_relative_", ordination_method, "_", taxrank_beta_div, "_level.pdf")
   ggsave(filename = figure_file_path, plot = combined_plot_relative, width = 10, height = 5)
+
+  log_message("Beta diversity successfully plotted.", log_file)
 }

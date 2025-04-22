@@ -82,6 +82,12 @@ barplot_extra = function(physeq = rarefied_genus_psmelt,
     pull(Tax_label) %>%
     unique() -> names(colorset)
 
+  if ("treatment" %in% colnames(plot_data_rel)) {
+    plot_data_rel <- plot_data_rel %>%
+      mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
+      mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
+  }
+
   barplot_relative =
     base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset, x_label = "Sample", y_label = "Relative Abundance (%)") +
     facet_add(present_factors) +

@@ -6,6 +6,8 @@ barplot2 = function(physeq = rarefied_genus_psmelt,
                    group_by_factor = NULL,
                    taxrank = "Tax_label") {
 
+  log_message(paste("Step 12: Creating absolute barplot.", paste(projects, collapse = ", ")), log_file)
+
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
 
@@ -99,6 +101,12 @@ barplot2 = function(physeq = rarefied_genus_psmelt,
 
   colorset[grep("Other", names(colorset))] <- "#D3D3D3"
 
+  if ("treatment" %in% colnames(plot_data_norm)) {
+    plot_data_norm <- plot_data_norm %>%
+      mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
+      mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
+  }
+
   barplot_absolute =
     base_barplot(plot_data_norm, "Sample", "norm_abund", colorset, x_label = "Sample", y_label = "Cell equivalents (Cells/ml) sample") +
     facet_add(present_factors) +
@@ -115,4 +123,6 @@ barplot2 = function(physeq = rarefied_genus_psmelt,
 
   figure_file_path = paste0(figure_folder, projects, "_barplot_absolute.pdf")
   ggsave(filename = figure_file_path, plot = barplot_absolute, width = 12, height = 8)
+
+  log_message("Barplot successfully plotted.", log_file)
 }

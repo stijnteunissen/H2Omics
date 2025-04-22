@@ -3,6 +3,8 @@ decontam =  function(physeq = resolved_tree_physeq,
                      decon_method = c("frequency", "prevalence", "both"),
                      blank = TRUE) {
 
+  log_message(paste("Step 5: Decontam: Removing contamination.", paste(projects, collapse = ", ")), log_file)
+
   # Construct the destination folder using the global variable norm_method
   #destination_folder <- paste0("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method)
   destination_folder <- paste0("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data/", norm_method)
@@ -23,4 +25,6 @@ decontam =  function(physeq = resolved_tree_physeq,
   saveRDS(phyloseq, file = new_file_path)
 
   message("Decontam was successfully executed.")
+
+  log_message("Decontam successfully executed.", log_file)
 }

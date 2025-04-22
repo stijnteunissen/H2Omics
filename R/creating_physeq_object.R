@@ -1,6 +1,8 @@
 #' @export
 creating_physeq_object = function(projects) {
 
+  log_message(paste("Step 2: Creating phyloseq object (physeq): is created using the table, rooted tree, classifier and metadata.", paste(projects, collapse = ", ")), log_file)
+
   message("Phyloseq successfully created.")
 
   # Construct the destination folder using the global variable norm_method
@@ -23,4 +25,6 @@ creating_physeq_object = function(projects) {
   saveRDS(phyloseq, file = new_file_path)
 
   print(phyloseq)
+
+  log_message("Phyloseq successfully created.", log_file)
 }

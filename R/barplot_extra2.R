@@ -82,6 +82,12 @@ barplot_extra2 = function(physeq = rarefied_genus_psmelt,
     pull(Tax_label) %>%
     unique() -> names(colorset)
 
+  if ("treatment" %in% colnames(plot_data_norm)) {
+    plot_data_norm <- plot_data_norm %>%
+      mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
+      mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
+  }
+
   barplot_absolute =
     base_barplot(plot_data_norm, "Sample", "norm_abund", colorset, x_label = "Sample", y_label = "Cell equivalents (Cells/ml) sample") +
     facet_add(present_factors) +

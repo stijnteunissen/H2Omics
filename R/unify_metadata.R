@@ -1,6 +1,8 @@
 #' @export
 unify_metadata <- function(projects) {
 
+  log_message(paste("Step 1: Merge metadata: adding fcm or qpcr data to the original metadata.", paste(projects, collapse = ", ")), log_file)
+
   message("Metadata successfully merged.")
 
   # Construct the destination folder using the global variable norm_method
@@ -24,4 +26,6 @@ unify_metadata <- function(projects) {
 
   # Copy the metadata file to the new folder, overwriting if necessary
   file.copy(from = metadata_file, to = new_file_path, overwrite = TRUE)
+
+  log_message("Metadata successfully merged.", log_file)
 }

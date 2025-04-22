@@ -6,6 +6,7 @@ barplot = function(physeq = rarefied_genus_psmelt,
                    group_by_factor = NULL,
                    taxrank = "Tax_label") {
 
+  log_message(paste("Step 11: Creating relative barplot.", paste(projects, collapse = ", ")), log_file)
 
   # Convert copy_correction to lowercase for robust comparison
   cc_val <- tolower(as.character(copy_correction))
@@ -84,6 +85,12 @@ barplot = function(physeq = rarefied_genus_psmelt,
 
   colorset[grep("Other", names(colorset))] <- "#D3D3D3"
 
+  if ("treatment" %in% colnames(plot_data_rel)) {
+    plot_data_rel <- plot_data_rel %>%
+      mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
+      mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
+  }
+
   barplot_relative =
     base_barplot(plot_data_rel, "Sample", "mean_rel_abund", colorset, x_label = "Sample", y_label = "Relative Abundance (%)") +
     ggtitle("Relative Abundance") +
@@ -110,4 +117,6 @@ barplot = function(physeq = rarefied_genus_psmelt,
   names(colorset)[(length(colorset) - num_new_taxa + 1):length(colorset)] <- new_taxa
 
   colorset[grep("Other", names(colorset))] <- "#D3D3D3"
+
+  log_message("Barplot successfully plotted.", log_file)
 }

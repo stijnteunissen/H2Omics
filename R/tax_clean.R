@@ -1,6 +1,8 @@
 #' @export
 tax_clean = function(physeq = physeq, tax_filter = TRUE) {
 
+  log_message(paste("Step 3: Tax clean: phyloseq taxa are cleaned.", paste(projects, collapse = ", ")), log_file)
+
   # Construct the destination folder using the global variable norm_method
   #destination_folder <- paste0("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method)
   destination_folder <- paste0("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data/", norm_method)
@@ -48,4 +50,6 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
 
   # Print a message indicating the process is complete
   message("Phyloseq object has been cleaned and saved.")
+
+  log_message("Successfully Tax cleaned.", log_file)
 }

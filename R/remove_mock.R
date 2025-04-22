@@ -2,6 +2,7 @@
 remove_mock = function(physeq = decontam_physeq,
                        mock_genera = mock_genera,
                        mock = TRUE) {
+  log_message(paste("Step 6: Removing mock: Mock samples en mock ASVs are removed fropm phyloseq object.", paste(projects, collapse = ", ")), log_file)
 
   # Construct the destination folder using the global variable norm_method
   #destination_folder <- paste0("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method)
@@ -23,4 +24,6 @@ remove_mock = function(physeq = decontam_physeq,
   saveRDS(phyloseq, file = new_file_path)
 
   message("mock features are removed")
+
+  log_message("Mock ASVs successfully removed.", log_file)
 }

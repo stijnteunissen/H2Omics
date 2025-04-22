@@ -1,6 +1,8 @@
 #' @export
 resolve_tree = function(physeq = cleaned_physeq) {
 
+  log_message(paste("Step 4: Resolving tree.", paste(projects, collapse = ", ")), log_file)
+
   # Construct the destination folder using the global variable norm_method
   #destination_folder <- paste0("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method)
   destination_folder <- paste0("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data/", norm_method)
@@ -21,4 +23,6 @@ resolve_tree = function(physeq = cleaned_physeq) {
   saveRDS(phyloseq, file = new_file_path)
 
   message("Resolved tree successfully saved.")
+
+  log_message("Tree successfully resolved", log_file)
 }
