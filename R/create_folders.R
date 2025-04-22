@@ -1,9 +1,4 @@
 #' @export
-log_message = function(message, log_file) {
-  write(paste(format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "-", message), log_file, append = TRUE)
-}
-
-#' @export
 create_folders = function(projects) {
 
   project_folder = paste0(base_path, projects)
@@ -52,4 +47,10 @@ create_folders = function(projects) {
 
     file.copy(files_for_phyloseq_object, destination_folder, overwrite = TRUE)
 
-  }
+    return(log_file)
+
+}
+#' @export
+log_message = function(message, log_file) {
+  write(paste(format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "-", message), log_file, append = TRUE)
+}
