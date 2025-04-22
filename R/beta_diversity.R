@@ -15,9 +15,9 @@ beta_diversity <- function(physeq = physeq,
   cc_val <- tolower(as.character(copy_correction))
 
   # Construct the destination folder based on norm_method and copy_correction value
-  destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data", norm_method, cc_val, "After_cleaning_rds_files", taxrank_beta_div)
+  destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data", norm_method, cc_val, "After_cleaning_rds_files", "Tax_label")
 
-  psdata_file <- list.files(destination_folder, pattern = "corrected_counts\\.rds$", full.names = TRUE)
+  psdata_file <- list.files(destination_folder, pattern = "phyloseq_Tax_label_level_copy_number_corrected_counts\\.rds$", full.names = TRUE)
 
   psdata_relative = readRDS(psdata_file)
 
