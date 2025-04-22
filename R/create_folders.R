@@ -13,8 +13,6 @@ create_folders = function(projects) {
     if(!dir.exists(paste0(project_folder, "/messages"))){dir.create(paste0(project_folder, "/messages"))}
     if(!dir.exists(paste0(project_folder, "/figures"))){dir.create(paste0(project_folder, "/figures"))}
 
-  log_file = paste0(base_path, glue("{projects}/messages/logging_output.txt"))
-
     source_folder = paste0(project_folder, "/qiime2_output")
     destination_folder = paste0(project_folder, "/input_data")
 
