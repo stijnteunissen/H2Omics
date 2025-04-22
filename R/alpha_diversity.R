@@ -12,7 +12,7 @@ alpha_diversity <- function(physeq = physeq,
   # Construct the destination folder based on norm_method and copy_correction value
   destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data", norm_method, cc_val, "After_cleaning_rds_files", "Tax_label")
 
-  psdata_file <- list.files(destination_folder, pattern = "phyloseq_Tax_label_level_fcm_normalised_cell_concentration_rarefied\\.rds$", full.names = TRUE)
+  psdata_file <- list.files(destination_folder, pattern = paste0("phyloseq_Tax_label_level_", norm_method, "_normalised_cell_concentration_rarefied\\.rds$"), full.names = TRUE)
 
   psdata = readRDS(psdata_file)
 
