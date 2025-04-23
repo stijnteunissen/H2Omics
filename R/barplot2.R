@@ -109,6 +109,7 @@ barplot2 = function(physeq = rarefied_genus_psmelt,
 
   barplot_absolute =
     base_barplot(plot_data_norm, "Sample", "norm_abund", colorset, x_label = "Sample", y_label = "Cell equivalents (Cells/ml) sample") +
+    ggtitle("Absolute Abundance") +
     facet_add(present_factors) +
     scale_y_continuous(labels = function(x) {
       ifelse(x == 0, "0", sapply(x, function(num) {
