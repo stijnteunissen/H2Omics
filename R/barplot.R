@@ -88,7 +88,7 @@ barplot = function(physeq = rarefied_genus_psmelt,
   if ("treatment" %in% colnames(plot_data_rel)) {
     plot_data_rel <- plot_data_rel %>%
       mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
-      mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
+      mutate(Sample = factor(Sample, levels = unique(Sample[order(is_control)])))
   }
 
   barplot_relative =
