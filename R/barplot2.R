@@ -103,7 +103,8 @@ barplot2 = function(physeq = rarefied_genus_psmelt,
 
   if ("treatment" %in% colnames(plot_data_norm)) {
     plot_data_norm <- plot_data_norm %>%
-      mutate(is_control = grepl("^untreated", tolower(treatment))) %>%
+      mutate(is_control = grepl("^untreated", treatment, ignore.case = TRUE)) %>%
+      mutate(treatment = factor(treatment, levels = unique(treatment[order(!is_control)]))) %>%
       mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
   }
 

@@ -123,9 +123,9 @@ beta_diversity <- function(physeq = physeq,
     theme(legend.position = "none")
 
   legend <- get_legend(plot_Jac + theme(legend.position = "right"))
-  combined_plot_relative <- cowplot::plot_grid(plot_Jac, plot_BC, plot_uu, plot_wu,
-                                               ncol = 2, labels = c("A", "B", "C", "D"))
-  combined_plot_relative <- cowplot::plot_grid(combined_plot_relative, legend, ncol = 2,
+  # combined_plot_relative <- cowplot::plot_grid(plot_Jac, plot_BC, plot_uu, plot_wu,
+  #                                              ncol = 2, labels = c("A", "B", "C", "D"))
+  combined_plot_relative <- cowplot::plot_grid(plot_BC, legend, ncol = 2,
                                                rel_widths = c(3, 0.8))
 
   print(combined_plot_relative)
