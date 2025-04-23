@@ -12,7 +12,7 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
   uncleaned_phyloseq <- readRDS(uncleaned_file)
   cleaned_phyloseq   <- readRDS(cleaned_file)
 
-  keep_ranks <- c("Family", "Genus")
+  keep_ranks <- c("Family", "Genus", "Species")
 
   subset_tax_table <- function(ps) {
     tax = tax_table(ps)
