@@ -1,55 +1,48 @@
 #' @export
 tax_clean = function(physeq = physeq, tax_filter = TRUE) {
 
-  log_message(paste("Step 3: Tax clean: phyloseq taxa are cleaned.", paste(projects, collapse = ", ")), log_file)
+  log_message(
+    paste("Step 3: Tax clean: phyloseq taxa are cleaned.", paste(projects, collapse = ", ")), log_file)
 
-  # Construct the destination folder using the global variable norm_method
-  #destination_folder <- paste0("/wetsus_repo_analysis/r_visualisation_scripts/H2Omics_workshop/sequencing_data/", norm_method)
-  destination_folder <- paste0("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data/", norm_method)
+  destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data/qpcr")
 
-  # List files that match the phyloseq RDS pattern
-  uncleaned_phyloseq_file <- list.files(destination_folder, pattern = "phyloseq_uncleaned\\.rds$", full.names = TRUE)
+  uncleaned_file <- list.files(destination_folder, pattern = "phyloseq_uncleaned\\.rds$", full.names = TRUE)
+  cleaned_file   <- list.files(destination_folder, pattern = "phyloseq_cleaned\\.rds$", full.names = TRUE)
 
-  # List files that match the phyloseq cleaned RDS pattern
-  cleaned_phyloseq_file <- list.files(destination_folder, pattern = "phyloseq_cleaned\\.rds$", full.names = TRUE)
+  uncleaned_phyloseq <- readRDS(uncleaned_file)
+  cleaned_phyloseq   <- readRDS(cleaned_file)
 
-  # Read the RDS file containing the phyloseq object
-  uncleaned_phyloseq <- readRDS(uncleaned_phyloseq_file)
-  cleaned_phyloseq <- readRDS(cleaned_phyloseq_file)
+  keep_ranks <- c("Family", "Genus", "Species")
 
-  print(head(tax_table(uncleaned_phyloseq), 10))
-  print(head(tax_table(cleaned_phyloseq), 10))
+  subset_tax_table <- function(ps) {
+    tax = tax_table(ps)
+    ranks = intersect(colnames(tax), keep_ranks)
+    tax_table(ps) = tax[, ranks, drop = FALSE]
+    ps
+  }
 
+  uncleaned_phyloseq <- subset_tax_table(uncleaned_phyloseq)
+  cleaned_phyloseq   <- subset_tax_table(cleaned_phyloseq)
 
-  # # Convert OTU tables to matrices for subsetting
-  # otu_mat_uncleaned <- as(tax_tabel(uncleaned_phyloseq), "matrix")
-  # otu_mat_cleaned <- as(tax_tabel(cleaned_phyloseq), "matrix")
-  #
-  # # Determine subset dimensions (first 10 OTUs and first 5 samples)
-  # n_taxa_uncleaned <- min(10, nrow(otu_mat_uncleaned))
-  # n_samples_uncleaned <- min(4, ncol(otu_mat_uncleaned))
-  #
-  # n_taxa_cleaned <- min(10, nrow(otu_mat_cleaned))
-  # n_samples_cleaned <- min(4, ncol(otu_mat_cleaned))
-  #
-  # # Print the subsets
-  # cat("First 10 OTUs and first 5 samples of uncleaned phyloseq object:\n")
-  # print(otu_mat_uncleaned[1:n_taxa_uncleaned, 1:n_samples_uncleaned])
-  #
-  # cat("\nFirst 10 OTUs and first 5 samples of cleaned phyloseq object:\n")
-  # print(otu_mat_cleaned[1:n_taxa_cleaned, 1:n_samples_cleaned])
+  selected_otus <- c(
+    "b79bafdef1d996f9c1c69b26b16a8d7d",
+    "2b68abfcc52aa30e49215e5a7d0657dd",
+    "bca1ec8c1c08341078a4a81852aec77c",
+    "3203a668b6213d8fb17701f535e72334",
+    "6a6110b7e3b01c8b2143982d71739c5b"
+  )
+  uncleaned_sel <- prune_taxa(selected_otus, uncleaned_phyloseq)
+  cleaned_sel   <- prune_taxa(selected_otus, cleaned_phyloseq)
 
-  # Construct the new folder path (using base_path and projects) for Before_cleaning_rds_files
-  new_folder <- file.path(base_path, projects, "output_data/rds_files/Before_cleaning_rds_files")
+  message("== Uncleaned, geselecteerde ASVs ==")
+  print(tax_table(uncleaned_sel))
+  message("== Cleaned, geselecteerde ASVs ==")
+  print(tax_table(cleaned_sel))
 
-  # Define the new file path for saving the cleaned phyloseq object as an RDS file
+  new_folder    <- file.path(base_path, projects, "output_data/rds_files/Before_cleaning_rds_files")
   new_file_path <- file.path(new_folder, paste0(projects, "_phyloseq_cleaned.rds"))
-
-  # Save the cleaned phyloseq object as an RDS file
   saveRDS(cleaned_phyloseq, file = new_file_path)
 
-  # Print a message indicating the process is complete
-  message("Phyloseq object has been cleaned and saved.")
-
+  message("Phyloseq object has been cleaned en opgeslagen.")
   log_message("Successfully Tax cleaned.", log_file)
 }

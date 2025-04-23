@@ -16,7 +16,7 @@ unify_metadata <- function(projects) {
   metadata_tsv <- read.delim(metadata_file, header = TRUE)
 
   # Display the first 10 rows of the metadata
-  print(head(metadata_tsv, 10))
+  #print(head(metadata_tsv, 10))
 
   # Construct the new folder path (using base_path and projects) for input_data
   new_folder <- file.path(base_path, projects, "input_data")
