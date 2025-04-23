@@ -70,7 +70,7 @@ alpha_diversity <- function(physeq = physeq,
     alpha_data_full <- alpha_data_full %>%
       mutate(is_control = grepl("^untreated", treatment, ignore.case = TRUE)) %>%
       mutate(treatment = factor(treatment, levels = unique(treatment[order(!is_control)]))) %>%
-      mutate(Sample = factor(Sample, levels = unique(Sample[order(!is_control)])))
+      mutate(sampleid = factor(sampleid, levels = unique(sampleid[order(!is_control)])))
   }
 
   chao1_plot = base_alpha_plot(alpha_data_full, "sampleid", "Chao1", x_label = "Sample", y_label = "Chao1 Index") +
