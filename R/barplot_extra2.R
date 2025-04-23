@@ -13,8 +13,8 @@ barplot_extra2 = function(physeq = rarefied_genus_psmelt,
   # Construct the destination folder based on norm_method and copy_correction value
   destination_folder <- file.path("/content/Workshop_H2Omics_test/H2Omics_workshop/sequencing_data", norm_method, cc_val, "After_cleaning_rds_files/Tax_label")
 
-  relative_files <- list.files(destination_folder, pattern = "pstibble_relative_data\\.rds$", full.names = TRUE)
-  absolute_files <- list.files(destination_folder, pattern = "pstibble_absolute_data_Tax_label_level\\.rds$", full.names = TRUE)
+  relative_files <- list.files(destination_folder, pattern = "plot_data_rel\\.rds$", full.names = TRUE)
+  absolute_files <- list.files(destination_folder, pattern = "plot_data_norm\\.rds$", full.names = TRUE)
 
   plot_data_rel = readRDS(relative_files)
   plot_data_norm = readRDS(absolute_files)
