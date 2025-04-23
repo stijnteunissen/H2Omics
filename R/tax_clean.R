@@ -12,8 +12,6 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
   uncleaned_phyloseq <- readRDS(uncleaned_file)
   cleaned_phyloseq   <- readRDS(cleaned_file)
 
-  cleaned_phyloseq = readRDS("~/Documents/Wetsus/Data_analysis/Projects/H2Omics_data_workshop/Workshop_qpcr_data/output_data/rds_files/Before_cleaning_rds_files/Workshop_qpcr_data_phyloseq_cleaned.rds")
-
   keep_ranks <- c("Family", "Genus", "Species")
 
   subset_tax_table <- function(ps) {
