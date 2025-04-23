@@ -83,7 +83,7 @@ alpha_diversity <- function(physeq = physeq,
 
   print(combined_plot)
 
-  figure_file_path = paste0(figure_folder, projects, "_", taxrank_alpha_div, "_level_alpha_diversity.pdf")
+  figure_file_path = paste0(figure_folder, projects, "_Genus_level_alpha_diversity.pdf")
   ggsave(filename = figure_file_path, plot = combined_plot, width = 12, height = 5)
 
   log_message("Alpha diversity successfully plotted.", log_file)

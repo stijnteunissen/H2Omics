@@ -130,7 +130,7 @@ beta_diversity <- function(physeq = physeq,
 
   print(combined_plot_relative)
 
-  figure_file_path <- paste0(figure_folder, projects, "_beta_diversity_relative_", ordination_method, "_", taxrank_beta_div, "_level.pdf")
+  figure_file_path <- paste0(figure_folder, projects, "_beta_diversity_relative_", ordination_method, "_Genus_level.pdf")
   ggsave(filename = figure_file_path, plot = combined_plot_relative, width = 10, height = 5)
 
   log_message("Beta diversity successfully plotted.", log_file)
