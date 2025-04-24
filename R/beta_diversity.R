@@ -46,7 +46,7 @@ beta_diversity <- function(physeq = physeq,
     if (!is.null(alpha_factor)) aes_params$alpha <- sym(alpha_factor)
 
     # Add points with the specified aesthetics
-    base_plot <- base_plot + geom_point(mapping = do.call(aes, aes_params))
+    base_plot <- base_plot + geom_point(mapping = do.call(aes, aes_params), size = 3)
 
     # Apply color scales based on whether the color factor is continuous or discrete
     if (!is.null(color_factor)) {
@@ -109,29 +109,30 @@ beta_diversity <- function(physeq = physeq,
   }
 
   # Create beta-diversity plots for a single na_type
-  plot_Jac <- base_beta_plot(psdata_relative, ordination_method, "jaccard", "Jaccard\n(binary presence only)",
-                             color_factor, shape_factor, size_factor, alpha_factor) +
-    theme(legend.position = "none")
+  # plot_Jac <- base_beta_plot(psdata_relative, ordination_method, "jaccard", "Jaccard\n(binary presence only)",
+  #                            color_factor, shape_factor, size_factor, alpha_factor) +
+  #   theme(legend.position = "none")
   plot_BC <- base_beta_plot(psdata_relative, ordination_method, "bray", "Bray-Curtis\n(presence + abundance)",
                             color_factor, shape_factor, size_factor, alpha_factor) +
-    theme(legend.position = "none")
-  plot_uu <- base_beta_plot(psdata_relative, ordination_method, "uunifrac", "Unweighted UniFrac\n(lineage presence only)",
-                            color_factor, shape_factor, size_factor, alpha_factor) +
-    theme(legend.position = "none")
-  plot_wu <- base_beta_plot(psdata_relative, ordination_method, "wunifrac", "Weighted UniFrac\n(lineage presence and abundance)",
-                            color_factor, shape_factor, size_factor, alpha_factor) +
-    theme(legend.position = "none")
+    theme(legend.position = "right")
+  # plot_uu <- base_beta_plot(psdata_relative, ordination_method, "uunifrac", "Unweighted UniFrac\n(lineage presence only)",
+  #                           color_factor, shape_factor, size_factor, alpha_factor) +
+  #   theme(legend.position = "none")
+  # plot_wu <- base_beta_plot(psdata_relative, ordination_method, "wunifrac", "Weighted UniFrac\n(lineage presence and abundance)",
+  #                           color_factor, shape_factor, size_factor, alpha_factor) +
+  #   theme(legend.position = "none")
 
-  legend <- get_legend(plot_Jac + theme(legend.position = "right"))
+  # legend <- get_legend(plot_Jac + theme(legend.position = "right"))
+  # legend <- suppressWarnings(get_legend(plot_Jac + theme(legend.position = "right")))
   # combined_plot_relative <- cowplot::plot_grid(plot_Jac, plot_BC, plot_uu, plot_wu,
   #                                              ncol = 2, labels = c("A", "B", "C", "D"))
-  combined_plot_relative <- cowplot::plot_grid(plot_BC, legend, ncol = 2,
-                                               rel_widths = c(3, 0.8))
+  # combined_plot_relative <- cowplot::plot_grid(plot_BC, legend, ncol = 2,
+  #                                             rel_widths = c(3, 0.8))
 
-  print(combined_plot_relative)
+  print(plot_BC)
 
   figure_file_path <- paste0(figure_folder, projects, "_beta_diversity_relative_", ordination_method, "_Genus_level.pdf")
-  ggsave(filename = figure_file_path, plot = combined_plot_relative, width = 10, height = 5)
+  ggsave(filename = figure_file_path, plot = plot_BC, width = 10, height = 5)
 
   log_message("Beta diversity successfully plotted.", log_file)
 }
