@@ -42,6 +42,6 @@ tax_clean = function(physeq = physeq, tax_filter = TRUE) {
   new_file_path <- file.path(new_folder, paste0(projects, "_phyloseq_cleaned.rds"))
   saveRDS(cleaned_phyloseq, file = new_file_path)
 
-  message("Phyloseq object has been cleaned en opgeslagen.")
+  message("The Phyloseq object has been cleaned and saved.")
   log_message("Successfully Tax cleaned.", log_file)
 }
